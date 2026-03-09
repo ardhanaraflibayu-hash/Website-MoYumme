@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoYumme Store</title>
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Google Font (Replacement if More Sugar not installed) -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL STYLE */
+body{
+background:url("https://cdn.phototourl.com/uploads/2026-03-09-617a8ced-a7cd-472a-a5c3-0cc0008c6114.jpg");
+background-size:cover;
+background-attachment:fixed;
+font-family:Arial;
+}
+
+/* Title Font */
+.title-font{
+font-family:'Pacifico',cursive;
+}
+
+/* Navbar */
+.navbar{
+backdrop-filter:blur(10px);
+}
+
+/* Hero */
+.hero{
+background:url('https://cdn.phototourl.com/uploads/2026-03-09-5b022938-42ed-4394-9e3e-89eac517010c.jpg') center/cover no-repeat;
+height:90vh;
+display:flex;
+height:80vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:white;
+background:rgba(0,0,0,0.4);
+}
+
+.hero h1{
+font-size:60px;
+}
+
+/* ===== PRODUCT CARDS ===== */
+
+.product-card{
+transition:0.3s;
+border-radius:15px;
+overflow:hidden;
+}
+
+.product-card:hover{
+transform:translateY(-10px);
+box-shadow:0 15px 30px rgba(0,0,0,0.2);
+}
+
+.product-title{
+font-family:'MoreSugar';
+font-size:22px;
+}
+
+.price{
+font-weight:600;
+color:#28a745;
+}
+
+/* ===== CART ===== */
+
+.cart-box{
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+.cart-title{
+font-family:'Pacifico',cursive;
+font-size:32px;
+}
+
+.cart-total{
+font-size:24px;
+font-weight:bold;
+color:#28a745;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #eee;
+padding:12px 0;
+}
+
+.cart-item-name{
+font-weight:600;
+}
+
+.qty-input{
+width:60px;
+text-align:center;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+/* ===== FOOTER ===== */
+
+.footer{
+background-color: rgba(0, 0, 0, 0.553);
+color: rgb(255, 255, 255);
+padding: 40px 20px;
+text-align: center;
+font-family: "Times New Roman", Times, serif;
+}
+
+/* ===== ANIMATIONS ===== */
+
+.fade-in{
+animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<div class="container">
+
+<a class="navbar-brand more-sugar" href="#">MoYumme</a>
+
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navMenu">
+
+<ul class="navbar-nav ms-auto">
+
+<li class="nav-item">
+<a class="nav-link" href="#products">Products</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="#cart">Cart (<span id="cart-count">0</span>)</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="#contact">Contact</a>
+</li>
+
+</ul>
+
+</div>
+</div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+<div>
+<h1 class="title-font">MoYumme Healthy Drink</h1>
+<p>Minuman sehat dan segar</p>
+<a href="#products" class="btn btn-warning btn-lg">Shop Now</a>
+</div>
+</section>
+
+<!-- SEARCH -->
+
+<div class="container mt-5">
+
+<input type="text" id="searchInput" class="form-control"
+placeholder="Search products...">
+
+</div>
+
+
+<!-- PRODUCTS -->
+
+<section id="products" class="container mt-5">
+
+<div class="row" id="product-list"></div>
+
+</section>
+
+<!-- CART -->
+
+<section id="cart" class="container mt-5">
+
+<div class="cart-box">
+
+<h2 class="cart-title mb-4">Shopping Cart</h2>
+
+<div id="cart-items"></div>
+
+<div class="d-flex justify-content-between mt-4">
+
+<h4>Total</h4>
+
+<h4 class="cart-total">
+Rp <span id="cart-total">0</span>
+</h4>
+
+</div>
+
+<button onclick="checkout()" class="btn btn-success w-100 mt-4">
+Checkout via WhatsApp
+</button>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer mt-5" id="contact">
+
+<h3 class="more-sugar">MoYumme Store</h3>
+
+<p>Customer Service : +628954025406006</p>
+
+<p>
+Location : JL sinduadi , Rusunawa Gemawang,  
+Blok B - Lantai 3 no.09
+</p>
+
+<p>© 2026 MoYumme</p>
+
+</footer>
+
+
+<script>
+
+/* ===== PRODUCT DATA ===== */
+
+const products = [
+
+{
+id:1,
+name:"MoYumme Buah Naga",
+price:12000,
+img:"https://cdn.phototourl.com/uploads/2026-03-09-c4c901dc-88fd-43fd-bc7f-9d88c427a410.jpg",
+desc:"Detoks Alami: Membantu membuang racun dalam tubuh berkat kandungan air dan seratnya.Kesehatan Kulit: Tinggi vitamin C dan antioksidan untuk kulit lebih cerah."
+},
+
+{
+id:2,
+name:"MoYumme Mangga",
+price:12000,
+img:"https://cdn.phototourl.com/uploads/2026-03-09-7a12c515-1fd7-4340-b8d8-0da8efc9aee3.jpg",
+desc:"Kaya akan Vitamin A dan C untuk memperkuat benteng pertahanan tubuh. Mengandung zeaxanthin yang melindungi mata dari sinar UV."
+},
+
+{
+id:3,
+name:"MoYumme Kurma",
+price:12000,
+img:"https://cdn.phototourl.com/uploads/2026-03-09-cf0f4310-c4d6-4014-a665-d287e990e665.jpg",
+desc:"Kaya serat alami untuk melancarkan sistem pembuangan. Antioksidan mencegah kerusakan oksidatif akibat radikal bebas."
+},
+
+{
+id:4,
+name:"MoYumme Alpukat",
+price:12000,
+img:"https://cdn.phototourl.com/uploads/2026-03-09-af8b922a-5880-4d32-bb16-96673472126c.jpg",
+desc:"Kandungan likopen membantu menjaga fungsi jantung dan menurunkan kolesterol."
+},
+
+{
+id:5,
+name:"MoYumme Buah Alpukat",
+price:12000,
+img:"https://cdn.phototourl.com/uploads/2026-03-09-d5775971-4360-4b1a-be64-f5aacc3a8adf.jpg",
+desc:"Mendukung kesehatan pembuluh darah dan fungsi jantung. Kaya lemak tak jenuh untuk konsentrasi."
+}
+
+]
+
+/* ===== CART ===== */
+
+let cart=[]
+
+/* ===== DISPLAY PRODUCTS ===== */
+
+function displayProducts(list){
+
+const container=document.getElementById("product-list")
+container.innerHTML=""
+
+list.forEach(p=>{
+
+container.innerHTML+=`
+
+<div class="col-md-4 mb-4 fade-in">
+
+<div class="card product-card">
+
+<img src="${p.img}" class="card-img-top">
+
+<div class="card-body">
+
+<h5 class="product-title">${p.name}</h5>
+
+<p class="price">Rp ${p.price.toLocaleString()}</p>
+
+<p>${p.desc}</p>
+
+<button onclick="addToCart(${p.id})"
+class="btn btn-primary">
+Add to Cart
+</button>
+
+</div>
+</div>
+</div>
+
+`
+
+})
+
+}
+
+/* ===== ADD CART ===== */
+
+function addToCart(id){
+
+const product=products.find(p=>p.id===id)
+
+const item=cart.find(i=>i.id===id)
+
+if(item){
+item.qty++
+}else{
+cart.push({...product,qty:1})
+}
+
+updateCart()
+
+}
+
+/* ===== UPDATE CART ===== */
+
+function updateCart(){
+
+const container=document.getElementById("cart-items")
+
+container.innerHTML=""
+
+let total=0
+let count=0
+
+cart.forEach(item=>{
+
+total+=item.price*item.qty
+count+=item.qty
+
+container.innerHTML+=`
+
+<div class="cart-item">
+
+<strong>${item.name}</strong>
+
+<br>
+
+Rp ${item.price.toLocaleString()}
+
+<br>
+
+Qty:
+<input type="number"
+value="${item.qty}"
+min="1"
+style="width:60px"
+onchange="changeQty(${item.id},this.value)">
+
+</div>
+
+`
+
+})
+
+document.getElementById("cart-total").innerText=total.toLocaleString()
+document.getElementById("cart-count").innerText=count
+
+}
+
+/* ===== CHANGE QTY ===== */
+
+function changeQty(id,val){
+
+const item=cart.find(i=>i.id===id)
+item.qty=parseInt(val)
+
+updateCart()
+
+}
+
+/* ===== SEARCH ===== */
+
+document.getElementById("searchInput")
+.addEventListener("keyup",function(){
+
+const keyword=this.value.toLowerCase()
+
+const filtered=products.filter(p=>
+p.name.toLowerCase().includes(keyword)
+)
+
+displayProducts(filtered)
+
+})
+
+/* ===== CHECKOUT WHATSAPP ===== */
+
+function checkout(){
+
+let text="Order MoYumme:%0A"
+
+cart.forEach(i=>{
+text+=`${i.name} x${i.qty}%0A`
+})
+
+const url=`https://wa.me/628954025406006?text=${text}`
+
+window.open(url)
+
+}
+
+/* ===== INITIAL LOAD ===== */
+
+displayProducts(products)
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
